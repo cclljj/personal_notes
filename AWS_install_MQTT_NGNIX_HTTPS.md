@@ -1,8 +1,6 @@
 The document is a personal note on setting up an AWS EC2 instance to support
 - MQTT
-- NGINX
-- PHP
-- HTTPS
+- NGINX (w/ PHP and SSL)
 - ATAK (server, web UI, and simulator)
 
 # Initialization
@@ -62,7 +60,7 @@ sudo systemctl enable mosquitto.service
 ```
 
 
-# Install NGINX and PHP
+# Install NGINX (with PHP & SSL)
 
 ```
 sudo yum -y install nginx
@@ -78,12 +76,7 @@ sudo systemctl enable php-fpm.service
 sudo systemctl enable nginx.service
 ```
 
-Reference
-- https://blog.toright.com/posts/3890/無堅不摧，唯快不破！快改用-nginx-php-fpm-取代-apache-吧！.html
-
-# Enable HTTPS on NGINX
-
-Install ssl and certbot
+Next, install ssl and certbot
 
 ```
 sudo yum install mod_ssl
@@ -92,6 +85,7 @@ sudo certbot certonly --webroot -w /var/www/html -d cclljj.ddns.net --email ccll
 ```
 
 Reference
+- https://blog.toright.com/posts/3890/無堅不摧，唯快不破！快改用-nginx-php-fpm-取代-apache-吧！.html
 - https://blog.hellojcc.tw/setup-https-with-letsencrypt-on-nginx/
 - https://serversforhackers.com/c/redirect-http-to-https-nginx
 - https://www.team-bob.org/update_letsencrypt_cert_using_systemd/
