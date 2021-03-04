@@ -134,6 +134,23 @@ A Quick Test Run:
 sudo python3 -m FreeTAKServer.controllers.services.FTS -DataPackageIP 0.0.0.0 -AutoStart True
 ```
 
+Create the system service configuration file at `/etc/systemd/system/FreeTAKServer.service` with the following contents:
+```
+[Unit]
+Description=FreeTAK Server service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/python3.8 -m FreeTAKServer.controllers.services.FTS -DataPackageIP 0.0.0.0 -AutoStart True
+
+[Install]
+WantedBy=multi-user.target
+```
+
 Make FreeTAKServer as a system service and run it
 
 ```
@@ -165,3 +182,17 @@ Configure AWS EC2 to allow TCP 5000 port (for http access), and access the UI pa
 - go to AWS external IP at port 5000 using HTTP
 - the default account is `admin` and the default password is `password`
 
+# Install and Run FreeTAKServer-Simulator
+
+Download FreeTAKServer-Simulator and its dependant library
+```
+git clone https://github.com/FreeTAKTeam/FreeTAKServer-Simulator
+git clone https://github.com/pinztrek/takpak
+mv takpak/takpak FreeTAKServer-Simulator/
+```
+
+Edit wander_example.py to give the server IP address (AWS external IP) and the location information; then, run this program to simulate nodes
+
+```
+python3.8 wander_example.py
+```
