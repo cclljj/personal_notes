@@ -1,6 +1,7 @@
 The document is a personal note on setting up an AWS EC2 instance to support
 - MQTT
 - NGINX (w/ PHP and SSL)
+- NoIP (dynamic DNS)
 - ATAK (server, web UI, and simulator)
 
 # Initialization
