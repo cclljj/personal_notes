@@ -53,7 +53,7 @@ LC_ALL=en_US.utf-8
 sudo yum -y install mosquitto
 ```
 
-Edit /etc/mosquitto/mosquitto.conf
+Edit `/etc/mosquitto/mosquitto.conf` and run the following commands
 
 ```
 sudo systemctl status mosquitto.service
@@ -69,7 +69,7 @@ sudo yum -y install nginx
 sudo yum -y install php-fpm
 ```
 
-Edit /etc/nginx/nginx.conf
+Edit `/etc/nginx/nginx.conf` and run the following commands
 
 ```
 sudo systemctl start php-fpm
