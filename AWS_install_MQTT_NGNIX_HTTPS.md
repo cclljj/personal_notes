@@ -9,7 +9,10 @@ install python3.8
 
 ```
 sudo amazon-linux-extras enable python3.8
-sudo yum install python3.8
+sudo yum -y install python3.8
+sudo yum -y install python38-devel
+sudo yum -y install gcc
+
 sudo ln -s /usr/bin/python3.8 /usr/bin/python3
 sudo pip3.8 install pandas
 sudo pip3.8 install requests
@@ -28,6 +31,13 @@ sudo amazon-linux-extras install docker
 sudo service docker start
 sudo systemctl enable docker.service
 sudo usermod -a -G docker ec2-user
+```
+
+To allow utf-8 character set, add the following lines in `/etc/environment`
+
+```
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
 ```
 
 # Install MQTT Broker
@@ -79,18 +89,6 @@ Reference
 - https://serversforhackers.com/c/redirect-http-to-https-nginx
 - https://www.team-bob.org/update_letsencrypt_cert_using_systemd/
 
-# Install TAK server
-
-```
-docker volume create fts_data
-docker run -d -p 8080:8080/tcp -p 8087:8087/tcp -e FTS_CONNECTION_MESSAGE="Server Connection Message" -e FTS_SAVE_COT_TO_DB="True" -v fts_data:/data --name fts --restart unless-stopped freetakteam/freetakserver:1.1.2
-```
-
-Configure AWS EC2 to allow TCP 8080/8087 ports
-
-Reference
-- https://github.com/FreeTAKTeam/FreeTAKServer-Docker
-
 # Setup dynamic DNS and auto update
 
 ```
@@ -99,3 +97,71 @@ sudo noip2 -C
 sudo systemctl enable noip.service
 sudo systemctl start noip.service
 ```
+
+# Install TAK server (docker version)
+
+```
+docker volume create fts_data
+docker run -d -p 8080:8080/tcp -p 8087:8087/tcp -e FTS_CONNECTION_MESSAGE="Server Connection Message" -e FTS_SAVE_COT_TO_DB="True" -v fts_data:/data --name fts --restart unless-stopped freetakteam/freetakserver:1.1.2
+```
+
+Configure AWS EC2 to allow TCP 8080/8087 ports (for CoT) and allow TCP 19023 port (for API)
+
+Reference
+- https://github.com/FreeTAKTeam/FreeTAKServer-Docker
+
+# Install TAK server (PyPi)
+
+Install TAK package and the depenant OpenSSL package
+
+```
+sudo python3 -m pip install FreeTAKServer[ui]
+sudo python3 -m pip install pyOpenSSL
+```
+
+Make some folders that are required to run FreeTAKServer
+
+```
+sudo mkdir /usr/local/lib/python3.8/dist-packages
+sudo mkdir /usr/local/lib/python3.8/dist-packages/FreeTAKServer
+sudo mkdir /usr/local/lib/python3.8/dist-packages/FreeTAKServer/ExCheck
+sudo mkdir /usr/local/lib/python3.8/dist-packages/FreeTAKServer/certs/
+```
+
+A Quick Test Run:
+
+```
+sudo python3 -m FreeTAKServer.controllers.services.FTS -DataPackageIP 0.0.0.0 -AutoStart True
+```
+
+Make FreeTAKServer as a system service and run it
+
+```
+sudo systemctl enable FreeTAKServer.service
+sudo systemctl start FreeTAKServer.service
+```
+
+You can also enter CLI mode to interact with FreeTAKServer:
+```
+sudo python3.8 -m FreeTAKServer.views.CLI
+```
+
+Reference:
+- https://freetakteam.github.io/FreeTAKServer-User-Docs/Installation/PyPi/Linux/Service/
+
+# Run FreeTAKServer-UI
+
+Change IP/Port settings in the configuration file `/usr/local/lib/python3.8/site-packages/FreeTAKServer-UI/config.py`
+
+- change **IP** to AWS external IP
+- change **APPIP** to AWS internal IP
+
+Run UI server:
+```
+sudo python3.8 /usr/local/lib/python3.8/site-packages/FreeTAKServer-UI/run.py
+```
+
+Configure AWS EC2 to allow TCP 5000 port (for http access), and access the UI page
+- go to AWS external IP at port 5000 using HTTP
+- the default account is `admin` and the default password is `password`
+
