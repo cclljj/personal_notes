@@ -1,4 +1,4 @@
-The document is a note, made by LJ, on setting up an AWS EC2 instance to support
+The document is a personal note on setting up an AWS EC2 instance to support
 - MQTT
 - NGINX
 - PHP
