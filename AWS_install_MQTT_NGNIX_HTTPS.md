@@ -1,3 +1,10 @@
+The document is a note, made by LJ, on setting up an AWS EC2 instance to support
+- MQTT
+- NGINX
+- PHP
+- HTTPS
+- ATAK
+
 # Initialization
 
 ```
