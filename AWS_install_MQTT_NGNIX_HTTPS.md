@@ -82,7 +82,8 @@ Next, install ssl and certbot
 ```
 sudo yum install mod_ssl
 sudo yum install certbot -y
-sudo certbot certonly --webroot -w /var/www/html -d cclljj.ddns.net --email cclljj@gmail.com --agree-tos
+sudo yum -y install python-certbot-nginx
+sudo certbot --nginx -d cclljj.ddns.net -d aws.cclljj.net
 ```
 
 Reference
